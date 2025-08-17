@@ -50,7 +50,7 @@ L'API implémente un système d'authentification sécurisé avec Sanctum, des va
 
 1. **Cloner le projet**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/mars225/asernum-backtest.git
    cd asernum-backtest
    ```
 
