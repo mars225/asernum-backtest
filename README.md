@@ -129,7 +129,7 @@ POST /api/register
 ### Documentation API
 
 - **Swagger UI** : `http://localhost:8000/api/documentation`
-- **Collection Postman** : Voir le fichier `postman_collection.json`
+- **Collection Postman** : Voir le fichier `/storage/api-docs/api-docs.json`
 
 ## Tests
 ```bash
