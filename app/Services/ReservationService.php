@@ -98,7 +98,7 @@ class ReservationService
 
     public function getAvailableRooms($hotelId, $startDate = null, $endDate = null)
     {
-        // À adapter selon ta logique, ici un exemple basique
+
         return $this->repository->findAvailableRooms($hotelId, $startDate, $endDate);
     }
 }
