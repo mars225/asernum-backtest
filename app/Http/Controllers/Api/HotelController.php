@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\HotelRequest;
 use App\Services\HotelService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class HotelController extends Controller
 {
@@ -29,6 +31,7 @@ class HotelController extends Controller
     public function store(HotelRequest $request)
     {
         $hotel = $this->service->createHotel($request->validated());
+        Log::channel('hotel')->info('Hôtel créé avec succès. : '. $hotel->label . 'par '. Auth::user()->name);
         return response()->json([
             'message' => 'Hôtel créé avec succès.',
             'data' => $hotel,
@@ -65,6 +68,7 @@ class HotelController extends Controller
     {
         try {
             $this->service->deleteHotel($id);
+            Log::channel('hotel')->info('Hôtel supprimé avec succès. ID: '. $id . ' par '. Auth::user()->name);
             return response()->json(['message' => 'Hôtel supprimé avec succès.']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);

@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -71,6 +72,7 @@ class UserController extends Controller
     {
         $user = $this->service->register($request->validated());
         $token = $user->createToken('auth_token')->plainTextToken;
+        Log::channel('user')->info('Inscription réussie pour : '. $request->login);
         return response()->json([
             'message' => 'Inscription réussie',
             'access_token' => $token,
@@ -85,6 +87,7 @@ class UserController extends Controller
             $user = $this->service->login($request->login, $request->password);
             $tokenName = $user->role === 'customer' ? 'customer_auth_token' : 'admin_auth_token';
             $token = $user->createToken($tokenName)->plainTextToken;
+            Log::channel('user')->info('Connexion réussie pour : '. $request->login);
             return response()->json([
                 'message' => 'Connexion réussie',
                 'access_token' => $token,
@@ -100,6 +103,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+        Log::channel('user')->info('Déconnexion réussie pour : '. $request->login);
         return response()->json(['message' => 'Déconnexion réussie']);
     }
 

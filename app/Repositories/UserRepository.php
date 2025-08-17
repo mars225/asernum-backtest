@@ -10,10 +10,10 @@ class UserRepository
         $query = User::query();
 
         if (!empty($filters['name'])) {
-            $query->where('name', 'ilike', "%{$filters['name']}%");
+            $query->where('name', 'like', "%{$filters['name']}%");
         }
         if (!empty($filters['email'])) {
-            $query->where('email', 'ilike', "%{$filters['email']}%");
+            $query->where('email', 'like', "%{$filters['email']}%");
         }
         if (!empty($filters['role'])) {
             $query->where('role', $filters['role']);

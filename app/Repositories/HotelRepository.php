@@ -10,10 +10,10 @@ class HotelRepository
         $query = Hotel::query();
 
         if (!empty($filters['label'])) {
-            $query->where('label', 'ilike', "%{$filters['label']}%");
+            $query->where('label', 'like', "%{$filters['label']}%");
         }
         if (!empty($filters['city'])) {
-            $query->where('city', 'ilike', "%{$filters['city']}%");
+            $query->where('city', 'like', "%{$filters['city']}%");
         }
 
         return $query->orderBy('label')->paginate($perPage);

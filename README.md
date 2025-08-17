@@ -1,13 +1,13 @@
-# Hotel Reservation Management API
+# Hotel Reservation Management API (ASERNUM-BACKTEST)
 
 ## Présentation
 
-Cette API RESTful développée avec Laravel 12 permet la gestion complète des réservations d'hôtels. Elle offre deux interfaces distinctes :
+Cette API RESTful développée avec Laravel 12 permet la gestion complète des réservations de chambre d'hôtels. Elle offre deux interfaces distinctes :
 
 - **Interface Administration** : Gestion des hôtels, chambres, clients et réservations
 - **Interface Client** : Consultation des disponibilités et gestion des réservations personnelles
 
-L'API implémente un système d'authentification sécurisé avec Sanctum, des validations robustes, et respecte les principes REST avec une architecture claire et modulaire.
+L'API implémente un système d'authentification sécurisé avec Sanctum, des validations, des logs, et respecte les principes REST avec une architecture claire et modulaire.
 
 ## Stack Technique
 
@@ -29,13 +29,11 @@ L'API implémente un système d'authentification sécurisé avec Sanctum, des va
 - 👤 Consultation des clients
 - 📋 Gestion des réservations (validation, démarrage, clôture, annulation)
 
-### Interface Client (`/api/customer`)
+### Interface Communes (`/api`)
 - 📝 Inscription et connexion des clients
 - 🔍 Consultation des chambres disponibles
 - 📅 Création de réservations avec vérification de disponibilité
 - 📋 Gestion des réservations personnelles
-
-### Fonctionnalités Communes (`/api/common`)
 - 🔍 Recherche de chambres disponibles par période
 
 ## Installation
@@ -44,15 +42,16 @@ L'API implémente un système d'authentification sécurisé avec Sanctum, des va
 
 - PHP 8.2+
 - Composer
-- PostgreSQL ou MongoDB
-- Redis (optionnel, pour le rate limiting)
+- PostgreSQL
+- Extension pdo pgsql
+- Extension pdo sqlite
 
 ### Étapes d'installation
 
 1. **Cloner le projet**
    ```bash
    git clone <repository-url>
-   cd hotel-reservation-api
+   cd asernum-backtest
    ```
 
 2. **Installer les dépendances**
@@ -80,13 +79,13 @@ L'API implémente un système d'authentification sécurisé avec Sanctum, des va
 
 5. **Exécuter les migrations et seeders**
    ```bash
-   php artisan migrate --seed
+   php artisan migrate:fresh --seed
    ```
    
    Cette commande va :
    - Créer la structure de base de données
    - Générer des comptes administrateurs de test
-   - Créer des données de démonstration
+   - Créer des données de démonstration (Hotels et Chambres)
 
 6. **Générer la documentation Swagger**
    ```bash
@@ -102,40 +101,22 @@ L'API sera accessible à l'adresse : `http://localhost:8000`
 
 ### Configuration additionnelle
 
-#### Rate Limiting (optionnel)
-Pour activer le rate limiting avec Redis :
-```env
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-CACHE_DRIVER=redis
-```
-
-#### Email (pour les notifications)
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=your-smtp-host
-MAIL_PORT=587
-MAIL_USERNAME=your-email
-MAIL_PASSWORD=your-password
-```
-
 ## Utilisation
 
 ### Authentification
 
 #### Administrateurs
 ```bash
-POST /api/admin/login
+POST /api/login
 {
-    "email": "admin@hotel.com",
-    "password": "password"
+    "email": "admin1@gmail.com",
+    "password": "admin1"
 }
 ```
 
 #### Clients
 ```bash
-POST /api/customer/register
+POST /api/register
 {
     "pseudo": "johndoe",
     "email": "john@example.com",
@@ -147,11 +128,17 @@ POST /api/customer/register
 
 ### Documentation API
 
-- **Swagger UI** : `http://localhost:8000/docs`
+- **Swagger UI** : `http://localhost:8000/api/documentation`
 - **Collection Postman** : Voir le fichier `postman_collection.json`
 
 ## Tests
+```bash
+# Recharger les config et vérifier que les tests s'exécuteront en mémoire sqlite :memory
+php artisan config:clear
 
+php artisan config:show database --env=testing
+
+```
 ### Lancer les tests
 ```bash
 # Tous les tests
@@ -163,9 +150,10 @@ php artisan test --testsuite=Unit
 # Tests fonctionnels seulement
 php artisan test --testsuite=Feature
 
-# Avec couverture
+# Avec couverture (si vous avez Xdebug)
 php artisan test --coverage
 ```
+- **Rapport de couverture des tests** : `http://localhost:8000/coverage`
 
 ### Structure des tests
 - `tests/Unit/` : Tests unitaires (modèles, services)
@@ -190,12 +178,10 @@ app/
 
 ## Sécurité
 
-- ✅ Authentification Sanctum avec tokens
-- ✅ Middleware de vérification des rôles
-- ✅ Rate limiting sur les endpoints sensibles
-- ✅ Validation stricte des données d'entrée
-- ✅ Protection CSRF
-- ✅ Gestion des erreurs sécurisée
+- Authentification Sanctum avec tokens
+- Middleware de vérification des rôles
+- Validation des données d'entrée
+- Gestion des erreurs sécurisée
 
 ## Endpoints Principaux
 

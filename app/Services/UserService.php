@@ -5,6 +5,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -62,6 +63,7 @@ class UserService
     {
         $user = $this->repository->findByLogin($login);
         if (!$user || !Hash::check($password, $user->password)) {
+            Log::channel('user')->error('Échec de connexion de l\'utilisateur'. $login);
             throw ValidationException::withMessages([
                 'login' => ['Identifiants incorrects'],
             ]);

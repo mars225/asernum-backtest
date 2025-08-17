@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for C:\laragon\www\ahotels\app\Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css?v=11.0.10" rel="stylesheet" type="text/css">
+  <link href="../_css/nv.d3.min.css?v=11.0.10" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css?v=11.0.10" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">C:\laragon\www\ahotels\app</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Services</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="UserService.php.html#10">App\Services\UserService</a></td><td class="text-right">39%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="UserService.php.html#10">App\Services\UserService</a></td><td class="text-right">57</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="UserService.php.html#20"><abbr title="App\Services\UserService::listUsers">listUsers</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#25"><abbr title="App\Services\UserService::getUser">getUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#34"><abbr title="App\Services\UserService::createUser">createUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#40"><abbr title="App\Services\UserService::updateUser">updateUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#52"><abbr title="App\Services\UserService::deleteUser">deleteUser</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ReservationService.php.html#52"><abbr title="App\Services\ReservationService::updateReservation">updateReservation</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="ReservationService.php.html#68"><abbr title="App\Services\ReservationService::updateStatusReservation">updateStatusReservation</abbr></a></td><td class="text-right">87%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="UserService.php.html#40"><abbr title="App\Services\UserService::updateUser">updateUser</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="UserService.php.html#25"><abbr title="App\Services\UserService::getUser">getUser</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="UserService.php.html#52"><abbr title="App\Services\UserService::deleteUser">deleteUser</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="ReservationService.php.html#52"><abbr title="App\Services\ReservationService::updateReservation">updateReservation</abbr></a></td><td class="text-right">3</td></tr>
+       <tr><td><a href="ReservationService.php.html#68"><abbr title="App\Services\ReservationService::updateStatusReservation">updateStatusReservation</abbr></a></td><td class="text-right">3</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.10</a> using <a href="https://www.php.net/" target="_top">PHP 8.4.11</a> and <a href="https://phpunit.de/">PHPUnit 11.5.32</a> at Sun Aug 17 18:32:02 UTC 2025.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/jquery.min.js?v=11.0.10" type="text/javascript"></script>
+  <script src="../_js/d3.min.js?v=11.0.10" type="text/javascript"></script>
+  <script src="../_js/nv.d3.min.js?v=11.0.10" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([0,0,0,0,1,0,0,0,0,0,1,2], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([5,0,0,0,0,0,0,0,0,2,1,20], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,9,"<a href=\"HotelService.php.html#7\">App\\Services\\HotelService<\/a>"],[92.5,17,"<a href=\"ReservationService.php.html#12\">App\\Services\\ReservationService<\/a>"],[100,9,"<a href=\"RoomService.php.html#7\">App\\Services\\RoomService<\/a>"],[39.285714285714285,14,"<a href=\"UserService.php.html#10\">App\\Services\\UserService<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"HotelService.php.html#11\">App\\Services\\HotelService::__construct<\/a>"],[100,1,"<a href=\"HotelService.php.html#16\">App\\Services\\HotelService::listHotels<\/a>"],[100,2,"<a href=\"HotelService.php.html#21\">App\\Services\\HotelService::getHotel<\/a>"],[100,1,"<a href=\"HotelService.php.html#30\">App\\Services\\HotelService::createHotel<\/a>"],[100,2,"<a href=\"HotelService.php.html#35\">App\\Services\\HotelService::updateHotel<\/a>"],[100,2,"<a href=\"HotelService.php.html#44\">App\\Services\\HotelService::deleteHotel<\/a>"],[100,1,"<a href=\"ReservationService.php.html#16\">App\\Services\\ReservationService::__construct<\/a>"],[100,1,"<a href=\"ReservationService.php.html#21\">App\\Services\\ReservationService::listReservations<\/a>"],[100,3,"<a href=\"ReservationService.php.html#26\">App\\Services\\ReservationService::getReservation<\/a>"],[100,2,"<a href=\"ReservationService.php.html#41\">App\\Services\\ReservationService::createReservation<\/a>"],[85.71428571428571,3,"<a href=\"ReservationService.php.html#52\">App\\Services\\ReservationService::updateReservation<\/a>"],[87.5,3,"<a href=\"ReservationService.php.html#68\">App\\Services\\ReservationService::updateStatusReservation<\/a>"],[90,3,"<a href=\"ReservationService.php.html#82\">App\\Services\\ReservationService::deleteReservation<\/a>"],[100,1,"<a href=\"ReservationService.php.html#99\">App\\Services\\ReservationService::getAvailableRooms<\/a>"],[100,1,"<a href=\"RoomService.php.html#11\">App\\Services\\RoomService::__construct<\/a>"],[100,1,"<a href=\"RoomService.php.html#16\">App\\Services\\RoomService::listRooms<\/a>"],[100,2,"<a href=\"RoomService.php.html#21\">App\\Services\\RoomService::getRoom<\/a>"],[100,1,"<a href=\"RoomService.php.html#30\">App\\Services\\RoomService::createRoom<\/a>"],[100,2,"<a href=\"RoomService.php.html#35\">App\\Services\\RoomService::updateRoom<\/a>"],[100,2,"<a href=\"RoomService.php.html#44\">App\\Services\\RoomService::deleteRoom<\/a>"],[100,1,"<a href=\"UserService.php.html#14\">App\\Services\\UserService::__construct<\/a>"],[0,1,"<a href=\"UserService.php.html#20\">App\\Services\\UserService::listUsers<\/a>"],[0,2,"<a href=\"UserService.php.html#25\">App\\Services\\UserService::getUser<\/a>"],[0,1,"<a href=\"UserService.php.html#34\">App\\Services\\UserService::createUser<\/a>"],[0,3,"<a href=\"UserService.php.html#40\">App\\Services\\UserService::updateUser<\/a>"],[0,2,"<a href=\"UserService.php.html#52\">App\\Services\\UserService::deleteUser<\/a>"],[100,3,"<a href=\"UserService.php.html#62\">App\\Services\\UserService::login<\/a>"],[100,1,"<a href=\"UserService.php.html#74\">App\\Services\\UserService::register<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

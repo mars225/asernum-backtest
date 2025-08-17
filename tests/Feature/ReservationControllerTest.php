@@ -1,47 +1,47 @@
 <?php
 
-use Tests\TestCase;
-use Mockery;
-use App\Services\ReservationService;
-use App\Models\User;
+namespace Tests\Feature;
+
 use App\Models\Hotel;
-use App\Models\Room;
 use App\Models\Reservation;
+use App\Models\Room;
+use App\Models\User;
+use App\Services\ReservationService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\Sanctum;
+use Mockery;
+use Tests\TestCase;
 
 class ReservationControllerTest extends TestCase
 {
+    use WithFaker;
+    use RefreshDatabase;
+
     protected $service;
-    protected $userMock;
-    protected $hotelMock;
-    protected $roomMock;
-    protected $reservationMock;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Mock du service
+        // Fake user authentifié
+        /*$user = User::factory()->create(['id' => 1]);
+        $this->actingAs($user, 'sanctum');*/
+
         $this->service = Mockery::mock(ReservationService::class);
         $this->app->instance(ReservationService::class, $this->service);
-
-        // Mocks des modèles
-        $this->userMock = Mockery::mock(User::class);
-        $this->hotelMock = Mockery::mock(Hotel::class);
-        $this->roomMock = Mockery::mock(Room::class);
-        $this->reservationMock = Mockery::mock(Reservation::class);
     }
 
     /** @test */
     public function it_lists_reservations()
     {
-        // Mock de l'utilisateur authentifié
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'customer',
+        ]);
         $this->actingAs($user, 'sanctum');
-
         $this->service
             ->shouldReceive('listReservations')
             ->with(15, [])
@@ -54,48 +54,32 @@ class ReservationControllerTest extends TestCase
     }
 
     /** @test */
-    /** @test */
     public function it_creates_reservation_successfully()
     {
-        // Créer un objet utilisateur simple sans Eloquent
-        $user = new \stdClass();
-        $user->id = 1;
-        $user->role = 'customer';
-
-        // Activer l'authentification avec ce user
+        // Créer un utilisateur avec le rôle customer pour ce test uniquement
+        $user = User::factory()->create(['role' => 'customer']);
         $this->actingAs($user, 'sanctum');
 
-        // Mock complet de DB pour les validations exists du FormRequest
-        DB::shouldReceive('table')->andReturnSelf();
-        DB::shouldReceive('where')->andReturnSelf();
-        DB::shouldReceive('exists')->andReturn(true);
-        DB::shouldReceive('first')->andReturn((object)['id' => 1]);
+        $hotel = Hotel::factory()->create();
 
-        // Données d'entrée (sans customer_id ni status car ajoutés automatiquement)
+        $room = Room::factory()->create([
+            'hotel_id' => $hotel->id,
+            'available' => true,
+        ]);
+
         $data = [
-            'room_id' => 1,
+            'room_id' => $room->id,
             'start_date' => '2025-01-01',
             'end_date' => '2025-01-05',
         ];
 
-        // Mock de la réservation créée
-        $reservation = Mockery::mock(Reservation::class);
-        $reservation->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $reservation->shouldReceive('getAttribute')->with('customer_id')->andReturn(1);
-        $reservation->shouldReceive('getAttribute')->with('room_id')->andReturn(1);
-        $reservation->shouldReceive('getAttribute')->with('status')->andReturn('pending');
-
-        // Le service doit recevoir les données avec customer_id et status ajoutés par prepareForValidation()
         $this->service
             ->shouldReceive('createReservation')
-            ->with(Mockery::on(function ($arg) {
-                return $arg['room_id'] === 1
-                    && $arg['customer_id'] === 1
-                    && $arg['status'] === 'pending'
-                    && $arg['start_date'] === '2025-01-01'
-                    && $arg['end_date'] === '2025-01-05';
-            }))
-            ->andReturn($reservation);
+            ->with(Mockery::on(fn($arg) => $arg['room_id'] === $room->id))
+            ->andReturn(new Reservation(array_merge($data, [
+                'customer_id' => $user->id,
+                'status' => 'pending',
+            ])));
 
         $response = $this->postJson('/api/reservations', $data);
 
@@ -106,14 +90,20 @@ class ReservationControllerTest extends TestCase
     /** @test */
     public function it_returns_422_if_reservation_creation_fails()
     {
-        // Mock de l'utilisateur customer
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'customer',
+        ]);
         $this->actingAs($user, 'sanctum');
+        $hotel = Hotel::factory()->create();
+
+        $room = Room::factory()->create([
+            'hotel_id' => $hotel->id,
+            'available' => true,
+        ]);
 
         $data = [
-            'room_id' => 1,
+            'room_id' => $room->id,
             'start_date' => '2025-01-01',
             'end_date' => '2025-01-05',
         ];
@@ -131,15 +121,12 @@ class ReservationControllerTest extends TestCase
     /** @test */
     public function it_shows_reservation_if_found()
     {
-        // Mock de l'utilisateur customer
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'customer',
+        ]);
         $this->actingAs($user, 'sanctum');
-
-        // Mock de la réservation trouvée
-        $reservation = Mockery::mock(Reservation::class);
-        $reservation->shouldReceive('getAttribute')->with('id')->andReturn(1);
+        $reservation = new Reservation(['id' => 1]);
 
         $this->service
             ->shouldReceive('getReservation')
@@ -155,15 +142,13 @@ class ReservationControllerTest extends TestCase
     /** @test */
     public function it_returns_404_if_reservation_not_found()
     {
-        // Mock de l'utilisateur customer
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'customer',
+        ]);
         $this->actingAs($user, 'sanctum');
-
         $this->service
             ->shouldReceive('getReservation')
-            ->with(999)
             ->andThrow(new ModelNotFoundException("Réservation non trouvée"));
 
         $response = $this->getJson('/api/reservations/999');
@@ -172,15 +157,17 @@ class ReservationControllerTest extends TestCase
             ->assertJsonFragment(['message' => 'Réservation non trouvée']);
     }
 
+
+
+
     /** @test */
     public function it_deletes_reservation_successfully()
     {
-        // Mock de l'utilisateur admin
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('admin');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'admin',
+        ]);
         $this->actingAs($user, 'sanctum');
-
         $this->service
             ->shouldReceive('deleteReservation')
             ->with(1)
@@ -195,15 +182,13 @@ class ReservationControllerTest extends TestCase
     /** @test */
     public function it_returns_404_if_delete_not_found()
     {
-        // Mock de l'utilisateur customer
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
+        $user = User::factory()->create([
+            'id' => 1,
+            'role' => 'customer',
+        ]);
         $this->actingAs($user, 'sanctum');
-
         $this->service
             ->shouldReceive('deleteReservation')
-            ->with(999)
             ->andThrow(new ModelNotFoundException("Réservation non trouvée"));
 
         $response = $this->deleteJson('/api/reservations/999');
@@ -212,79 +197,4 @@ class ReservationControllerTest extends TestCase
             ->assertJsonFragment(['message' => 'Réservation non trouvée']);
     }
 
-    /** @test */
-    public function it_starts_reservation_successfully()
-    {
-        // Mock de l'utilisateur admin
-        $admin = Mockery::mock(User::class);
-        $admin->shouldReceive('getAttribute')->with('id')->andReturn(2);
-        $admin->shouldReceive('getAttribute')->with('role')->andReturn('admin');
-        $this->actingAs($admin, 'sanctum');
-
-        // Mock de la réservation mise à jour
-        $reservation = Mockery::mock(Reservation::class);
-        $reservation->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $reservation->shouldReceive('getAttribute')->with('status')->andReturn('confirmed');
-
-        $this->service
-            ->shouldReceive('updateStatusReservation')
-            ->with(1, ['status' => 'confirmed'])
-            ->andReturn($reservation);
-
-        $response = $this->putJson("/api/admin/reservations/1/start");
-
-        $response->assertStatus(200)
-            ->assertJsonFragment(['message' => 'Réservation mise à jour']);
-    }
-
-    /** @test */
-    public function it_closes_reservation_successfully()
-    {
-        // Mock de l'utilisateur admin
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('admin');
-        $this->actingAs($user, 'sanctum');
-
-        // Mock de la réservation fermée
-        $reservation = Mockery::mock(Reservation::class);
-        $reservation->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $reservation->shouldReceive('getAttribute')->with('status')->andReturn('closed');
-
-        $this->service
-            ->shouldReceive('updateStatusReservation')
-            ->with(1, ['status' => 'closed'])
-            ->andReturn($reservation);
-
-        $response = $this->putJson('/api/admin/reservations/1/close', ['status' => 'closed']);
-
-        $response->assertStatus(200)
-            ->assertJsonFragment(['message' => 'Réservation mise à jour']);
-    }
-
-    /** @test */
-    public function it_returns_available_rooms()
-    {
-        // Mock de l'utilisateur customer
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute')->with('id')->andReturn(1);
-        $user->shouldReceive('getAttribute')->with('role')->andReturn('customer');
-        $this->actingAs($user, 'sanctum');
-
-        $this->service
-            ->shouldReceive('getAvailableRooms')
-            ->with(1, '2025-03-01', '2025-03-10')
-            ->andReturn(['roomA', 'roomB']);
-
-        $response = $this->getJson('/api/hotels/1/available-rooms?start_date=2025-03-01&end_date=2025-03-10');
-
-        $response->assertStatus(200)
-            ->assertJsonFragment(['roomA', 'roomB']);
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
 }

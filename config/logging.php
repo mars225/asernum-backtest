@@ -89,7 +89,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
@@ -125,6 +125,34 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        // Hôtel
+        'hotel' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/hotel.log'),
+            'level' => 'debug',
+        ],
+
+        // Chambre
+        'room' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/room.log'),
+            'level' => 'debug',
+        ],
+
+        // Réservation
+        'reservation' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/reservation.log'),
+            'level' => 'debug',
+        ],
+
+        // Utilisateur
+        'user' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/user.log'),
+            'level' => 'debug',
         ],
 
     ],
